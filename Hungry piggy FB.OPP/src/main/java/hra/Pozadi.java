@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class Pozadi {
     private Image obrazek;
-    // Cesta začíná na Y = 440 (protože 500 - 60 = 440)
     private int vyskaCesty = 60;
 
     public Pozadi() {

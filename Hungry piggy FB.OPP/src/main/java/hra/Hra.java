@@ -30,8 +30,6 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
         this.addKeyListener(this);
 
         pozadi = new Pozadi();
-        // Prase je vysoké 60, cesta začíná na 440.
-        // Proto y = 440 - 60 = 380
         hrac = new Hrac(SIRKA_OKNA / 2 - 30, 360);
 
         casovac = new Timer(16, this);
@@ -53,26 +51,41 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         pozadi.nakresliSe(g);
-        hrac.setSnimek(aktualniSnimek);
-        hrac.nakresliSe(g);
-        for (PadajiciVec vec : veci) {
-            vec.nakresliSe(g);
-        }
 
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Skore: " + skore, 20, 30);
+        if (hraBezi) {
+            hrac.setSnimek(aktualniSnimek);
+            hrac.nakresliSe(g);
+            for (PadajiciVec vec : veci) {
+                vec.nakresliSe(g);
+            }
 
-        if (casOchrany > 0) {
-            g.drawString("Ochrana: " + (casOchrany / 60) + "s", 20, 60);
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.drawString("Skore: " + skore, 20, 30);
+
+            if (casOchrany > 0) {
+                g.drawString("Ochrana: " + (casOchrany / 60) + "s", 20, 60);
+            }
         }
 
         if (!hraBezi) {
-            g.setColor(Color.RED);
-            g.setFont(new Font("Arial", Font.BOLD, 40));
-            g.drawString("KONEC HRY!", SIRKA_OKNA / 2 - 100, VYSKA_OKNA / 2);
-            g.setFont(new Font("Arial", Font.BOLD, 20));
-            g.drawString("Stiskni R pro restart", SIRKA_OKNA / 2 - 90, VYSKA_OKNA / 2 + 40);
+            g.setColor(new Color(0, 0, 0, 200));
+            g.fillRect(0, 0, SIRKA_OKNA, VYSKA_OKNA);
+
+            g.setColor(Color.WHITE);
+            Font font1 = new Font("Arial", Font.BOLD, 40);
+            Font font2 = new Font("Arial", Font.BOLD, 24);
+            Font font3 = new Font("Arial", Font.BOLD, 20);
+
+            g.setFont(font1);
+            FontMetrics fm1 = g.getFontMetrics();
+            g.drawString("KONEC HRY!", (SIRKA_OKNA / 2) - (fm1.stringWidth("KONEC HRY!") / 2), 230);
+
+            g.setFont(font2);
+            FontMetrics fm2 = g.getFontMetrics();
+            g.drawString("Skóre: " + skore, (SIRKA_OKNA / 2) - (fm2.stringWidth("Skóre: " + skore) / 2), 280);
+
+
         }
     }
 
@@ -127,6 +140,10 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (!hraBezi) {
+            return;
+        }
+
         int klavesa = e.getKeyCode();
         if (klavesa == KeyEvent.VK_LEFT) hrac.pohniDoleva();
         if (klavesa == KeyEvent.VK_RIGHT) hrac.pohniDoprava();

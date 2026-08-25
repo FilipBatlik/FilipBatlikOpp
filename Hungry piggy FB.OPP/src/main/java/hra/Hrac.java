@@ -71,12 +71,11 @@ public class Hrac {
         }
 
         if (smer.equals("vpravo")) {
+            g.drawImage(aktualniObrazek, x, y, sirka, vyska, null);
+        } else {
             Graphics2D g2d = (Graphics2D) g;
             int xPosun = x + sirka;
             g2d.drawImage(aktualniObrazek, xPosun, y, -sirka, vyska, null);
-        } else {
-
-            g.drawImage(aktualniObrazek, x, y, sirka, vyska, null);
         }
     }
 }
