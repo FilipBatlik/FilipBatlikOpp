@@ -18,6 +18,9 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
     private int skore = 0;
     private int casOchrany = 0;
     private int aktualniSnimek = 0;
+    private int pocetZivotu = 3;
+
+    private Image srdce;
 
     private Hrac hrac;
     private Pozadi pozadi;
@@ -31,6 +34,7 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
 
         pozadi = new Pozadi();
         hrac = new Hrac(SIRKA_OKNA / 2 - 30, 360);
+        srdce = new ImageIcon(getClass().getResource("/heart.png")).getImage();
 
         casovac = new Timer(16, this);
         casovac.start();
@@ -66,6 +70,13 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
             if (casOchrany > 0) {
                 g.drawString("Ochrana: " + (casOchrany / 60) + "s", 20, 60);
             }
+
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.drawString("Zivoty:", 15, 110);
+            for (int i = 0; i < pocetZivotu; i++) {
+                g.drawImage(srdce, 95 + (i * 30), 92, 25, 25, null);
+            }
         }
 
         if (!hraBezi) {
@@ -85,7 +96,9 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
             FontMetrics fm2 = g.getFontMetrics();
             g.drawString("Skóre: " + skore, (SIRKA_OKNA / 2) - (fm2.stringWidth("Skóre: " + skore) / 2), 280);
 
-
+            g.setFont(font3);
+            FontMetrics fm3 = g.getFontMetrics();
+            g.drawString("Stiskni R pro restart", (SIRKA_OKNA / 2) - (fm3.stringWidth("Stiskni R pro restart") / 2), 320);
         }
     }
 
@@ -128,8 +141,15 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
                             veci.remove(i);
                             i--;
                         } else {
-                            hraBezi = false;
-                            break;
+                            if (pocetZivotu > 1) {
+                                pocetZivotu--;
+                                veci.remove(i);
+                                i--;
+                            } else {
+                                pocetZivotu--;
+                                hraBezi = false;
+                                break;
+                            }
                         }
                     }
                 }
@@ -153,6 +173,7 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
             veci.clear();
             hrac.reset();
             hraBezi = true;
+            pocetZivotu = 3;
         }
     }
 

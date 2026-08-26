@@ -70,7 +70,7 @@ public class Hrac {
             aktualniObrazek = tanec[snimek];
         }
 
-        if (smer.equals("vpravo")) {
+        if (smer.equals("vlevo")) {
             g.drawImage(aktualniObrazek, x, y, sirka, vyska, null);
         } else {
             Graphics2D g2d = (Graphics2D) g;
