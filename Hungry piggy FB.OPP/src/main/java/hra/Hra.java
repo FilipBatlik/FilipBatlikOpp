@@ -124,33 +124,15 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
                     veci.remove(i);
                     i--;
                 } else if (vec.overujeKolizi(hrac.getX(), hrac.getY(), hrac.getSirka(), hrac.getVyska())) {
-                    if (vec instanceof Jidlo) {
-                        skore += 10;
+
+                    // Pokud je aktivní štít, bomba se jen odrazí a zmizí
+                    if (vec instanceof Bomba && casOchrany > 0) {
                         veci.remove(i);
                         i--;
-                    } else if (vec instanceof Lektvar) {
-                        skore += 50;
+                    } else {
+                        vec.zpracujKolizi(this);
                         veci.remove(i);
                         i--;
-                    } else if (vec instanceof Stit) {
-                        casOchrany = 180;
-                        veci.remove(i);
-                        i--;
-                    } else if (vec instanceof Bomba) {
-                        if (casOchrany > 0) {
-                            veci.remove(i);
-                            i--;
-                        } else {
-                            if (pocetZivotu > 1) {
-                                pocetZivotu--;
-                                veci.remove(i);
-                                i--;
-                            } else {
-                                pocetZivotu--;
-                                hraBezi = false;
-                                break;
-                            }
-                        }
                     }
                 }
             }
@@ -181,4 +163,21 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
     public void keyReleased(KeyEvent e) {}
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    public void pridejSkore(int body) {
+        skore += body;
+    }
+
+    public void uberZivot() {
+        if (pocetZivotu > 1) {
+            pocetZivotu--;
+        } else {
+            pocetZivotu = 0;
+            hraBezi = false;
+        }
+    }
+
+    public void aktivujOchranu() {
+        casOchrany = 180;
+    }
 }

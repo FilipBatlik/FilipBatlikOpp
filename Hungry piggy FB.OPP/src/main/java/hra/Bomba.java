@@ -15,4 +15,9 @@ public class Bomba extends PadajiciVec {
     public void nakresliSe(Graphics g) {
         g.drawImage(obrazek, x, y, sirka, vyska, null);
     }
+
+    @Override
+    public void zpracujKolizi(Hra hra) {
+        hra.uberZivot();
+    }
 }

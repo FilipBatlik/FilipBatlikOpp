@@ -21,6 +21,9 @@ public class PadajiciVec {
                 y < hracY + hracVyska && y + vyska > hracY;
     }
 
+    public void zpracujKolizi(Hra hra) {
+    }
+
     public void nakresliSe(Graphics g) {
         g.setColor(Color.GRAY);
         g.fillRect(x, y, sirka, vyska);
