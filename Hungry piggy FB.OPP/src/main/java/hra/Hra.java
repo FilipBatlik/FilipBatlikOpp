@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class Hra extends JPanel implements ActionListener, KeyListener {
@@ -34,7 +35,7 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
 
         pozadi = new Pozadi();
         hrac = new Hrac(SIRKA_OKNA / 2 - 30, 360);
-        srdce = new ImageIcon(getClass().getResource("/heart.png")).getImage();
+        srdce = new ImageIcon(Objects.requireNonNull(getClass().getResource("/heart.png"))).getImage();
 
         casovac = new Timer(16, this);
         casovac.start();
@@ -125,15 +126,11 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
                     i--;
                 } else if (vec.overujeKolizi(hrac.getX(), hrac.getY(), hrac.getSirka(), hrac.getVyska())) {
 
-                    // Pokud je aktivní štít, bomba se jen odrazí a zmizí
-                    if (vec instanceof Bomba && casOchrany > 0) {
-                        veci.remove(i);
-                        i--;
-                    } else {
+                    if (!(vec instanceof Bomba) || casOchrany <= 0) {
                         vec.zpracujKolizi(this);
-                        veci.remove(i);
-                        i--;
                     }
+                    veci.remove(i);
+                    i--;
                 }
             }
         }

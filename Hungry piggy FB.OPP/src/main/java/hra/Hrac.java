@@ -2,6 +2,7 @@ package hra;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class Hrac {
     private int x, y;
@@ -25,8 +26,8 @@ public class Hrac {
         chuze = new Image[12];
 
         for (int i = 0; i <= 11; i++) {
-            tanec[i] = new ImageIcon(getClass().getResource("/tanec_" + i + ".png")).getImage();
-            chuze[i] = new ImageIcon(getClass().getResource("/chuze_" + i + ".png")).getImage();
+            tanec[i] = new ImageIcon(Objects.requireNonNull(getClass().getResource("/tanec_" + i + ".png"))).getImage();
+            chuze[i] = new ImageIcon(Objects.requireNonNull(getClass().getResource("/chuze_" + i + ".png"))).getImage();
         }
     }
 

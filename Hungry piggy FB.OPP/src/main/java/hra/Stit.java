@@ -2,13 +2,14 @@ package hra;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class Stit extends PadajiciVec {
     private Image obrazek;
 
     public Stit(int x, int y) {
         super(x, y);
-        this.obrazek = new ImageIcon(getClass().getResource("/stit.png")).getImage();
+        this.obrazek = new ImageIcon(Objects.requireNonNull(getClass().getResource("/stit.png"))).getImage();
     }
 
     @Override
