@@ -125,12 +125,14 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
                     veci.remove(i);
                     i--;
                 } else if (vec.overujeKolizi(hrac.getX(), hrac.getY(), hrac.getSirka(), hrac.getVyska())) {
-
-                    if (!(vec instanceof Bomba) || casOchrany <= 0) {
+                    if (vec instanceof Bomba && casOchrany > 0) {
+                        veci.remove(i);
+                        i--;
+                    } else {
                         vec.zpracujKolizi(this);
+                        veci.remove(i);
+                        i--;
                     }
-                    veci.remove(i);
-                    i--;
                 }
             }
         }

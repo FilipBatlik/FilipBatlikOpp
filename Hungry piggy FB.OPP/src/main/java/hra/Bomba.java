@@ -2,14 +2,13 @@ package hra;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 public class Bomba extends PadajiciVec {
     private Image obrazek;
 
     public Bomba(int x, int y) {
         super(x, y);
-        this.obrazek = new ImageIcon(Objects.requireNonNull(getClass().getResource("/bomba.png"))).getImage();
+        this.obrazek = new ImageIcon(getClass().getResource("/bomba.png")).getImage();
     }
 
     @Override
