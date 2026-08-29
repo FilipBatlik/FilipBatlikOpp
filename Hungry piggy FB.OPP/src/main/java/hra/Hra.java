@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
 
 public class Hra extends JPanel implements ActionListener, KeyListener {
@@ -21,6 +20,10 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
     private int aktualniSnimek = 0;
     private int pocetZivotu = 3;
 
+    private int combo = 0;
+    private int posledniCasChyceni = 0;
+    private int level = 1;
+
     private Image srdce;
 
     private Hrac hrac;
@@ -35,18 +38,15 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
 
         pozadi = new Pozadi();
         hrac = new Hrac(SIRKA_OKNA / 2 - 30, 360);
-        srdce = new ImageIcon(Objects.requireNonNull(getClass().getResource("/heart.png"))).getImage();
+        srdce = new ImageIcon(getClass().getResource("/heart.png")).getImage();
 
         casovac = new Timer(16, this);
         casovac.start();
 
-        animacniTimer = new Timer(100, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                aktualniSnimek++;
-                if (aktualniSnimek > 11) {
-                    aktualniSnimek = 0;
-                }
+        animacniTimer = new Timer(100, e -> {
+            aktualniSnimek++;
+            if (aktualniSnimek > 11) {
+                aktualniSnimek = 0;
             }
         });
         animacniTimer.start();
@@ -78,6 +78,14 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
             for (int i = 0; i < pocetZivotu; i++) {
                 g.drawImage(srdce, 95 + (i * 30), 92, 25, 25, null);
             }
+
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("Arial", Font.BOLD, 16));
+            g.drawString("Level: " + level, 20, 140);
+
+            if (combo > 0) {
+                g.drawString("Combo: " + combo, 20, 170);
+            }
         }
 
         if (!hraBezi) {
@@ -87,7 +95,6 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
             g.setColor(Color.WHITE);
             Font font1 = new Font("Arial", Font.BOLD, 40);
             Font font2 = new Font("Arial", Font.BOLD, 24);
-            Font font3 = new Font("Arial", Font.BOLD, 20);
 
             g.setFont(font1);
             FontMetrics fm1 = g.getFontMetrics();
@@ -97,9 +104,7 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
             FontMetrics fm2 = g.getFontMetrics();
             g.drawString("Skóre: " + skore, (SIRKA_OKNA / 2) - (fm2.stringWidth("Skóre: " + skore) / 2), 280);
 
-            g.setFont(font3);
-            FontMetrics fm3 = g.getFontMetrics();
-            g.drawString("Stiskni R pro restart", (SIRKA_OKNA / 2) - (fm3.stringWidth("Stiskni R pro restart") / 2), 320);
+
         }
     }
 
@@ -130,8 +135,12 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
                         i--;
                     } else {
                         vec.zpracujKolizi(this);
+                        comboSystem();
+                        levelSystem();
+                        zrychliHru();
                         veci.remove(i);
                         i--;
+
                     }
                 }
             }
@@ -155,6 +164,10 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
             hrac.reset();
             hraBezi = true;
             pocetZivotu = 3;
+            combo = 0;
+            posledniCasChyceni = 0;
+            level = 1;
+            rychlostPadu = 5;
         }
     }
 
@@ -178,5 +191,43 @@ public class Hra extends JPanel implements ActionListener, KeyListener {
 
     public void aktivujOchranu() {
         casOchrany = 180;
+    }
+
+    public void comboSystem() {
+        int aktualniCas = (int) System.currentTimeMillis();
+
+        if (aktualniCas - posledniCasChyceni < 2000) {
+            combo++;
+        } else {
+            combo = 1;
+        }
+        posledniCasChyceni = aktualniCas;
+
+        if (combo >= 3) {
+            skore += 25;
+            combo = 0;
+        }
+    }
+
+    public void levelSystem() {
+        if (skore > 100 && level == 1) {
+            level = 2;
+            rychlostPadu = 7;
+        } else if (skore > 200 && level == 2) {
+            level = 3;
+            rychlostPadu = 9;
+        } else if (skore > 300 && level == 3) {
+            level = 4;
+            rychlostPadu = 11;
+        }
+    }
+
+    public void zrychliHru() {
+        if (casOchrany > 0) {
+            casOchrany -= 10;
+        }
+        if (skore > 50) {
+            rychlostPadu = 6;
+        }
     }
 }

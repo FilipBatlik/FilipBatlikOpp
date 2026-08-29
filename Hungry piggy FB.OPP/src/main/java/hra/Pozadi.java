@@ -16,7 +16,6 @@ public class Pozadi {
         g.drawImage(obrazek, 0, 0, 900, 500, null);
     }
 
-    public int getVyskaCesty() {
-        return vyskaCesty;
-    }
+
+
 }
